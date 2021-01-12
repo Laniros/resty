@@ -1,7 +1,7 @@
 import Signup from "./Signup";
 import { AuthProvider } from "../contexts/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Dashboard from "./dashboard";
+import Dashboard from "./Dashboard";
 import Login from "./Login";
 import { Container } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
@@ -10,6 +10,7 @@ import UpdateProfile from "./UpdateProfile";
 import NavBar from "../menus/Navbar";
 import Preferences from "./Preferences";
 import Home from "./Home";
+import AddRestaurant from "./AddRestaurant";
 
 function App() {
   return (
@@ -23,7 +24,12 @@ function App() {
           <div className="w-100" style={{ maxWidth: "400px" }}>
             <Router>
               <Switch>
-                <PrivateRoute exact path="/" component={Home} />
+                <PrivateRoute exact path="/" component={Dashboard} />
+                <PrivateRoute
+                  exact
+                  path="/add-restaurants"
+                  component={AddRestaurant}
+                />
                 <PrivateRoute
                   path="/update-profile"
                   component={UpdateProfile}

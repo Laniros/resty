@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "../firebase";
-import { Alert } from "react-bootstrap";
 const AuthContext = React.createContext();
 
 export function useAuth() {
@@ -27,6 +26,7 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    console.log("in");
     return auth.signOut();
   }
 

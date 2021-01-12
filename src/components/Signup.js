@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Card, Button, Form, Alert } from "react-bootstrap";
+import { Card, Button, Form, Alert, Modal } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import firebase from "../firebase";
@@ -11,6 +11,7 @@ export default function Signup() {
   const { signUp } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
 
   async function handleSubmit(e) {
@@ -46,11 +47,26 @@ export default function Signup() {
       var usersRef = ref.child(res);
       usersRef.set({
         email: emailRef.current.value,
+        role: 0,
       });
 
       setLoading(false);
+      showModal();
     }
   }
+
+  const showModal = () => {
+    setIsOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsOpen(false);
+    history.push("/");
+  };
+
+  const handlePref = (e) => {
+    console.log("yes");
+  };
 
   return (
     <>
@@ -79,6 +95,52 @@ export default function Signup() {
         <div className="w-100 text-center mt-2">
           Already have an account? <Link to="/login">Log In</Link>
         </div>
+        <Modal
+          show={isOpen}
+          onHide={hideModal}
+          animation={false}
+          backdrop="static"
+        >
+          <Modal.Header>
+            <Modal.Title>Congrats! You are now part of our own</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              <b>You can now select your preferences</b>
+            </p>
+            <p>You can change them anytime through your profile</p>
+          </Modal.Body>
+          <Form>
+            <div key={`default-checkbox`} className="mb-3 ml-4">
+              <Form.Check
+                inline
+                type={"checkbox"}
+                id={`vegan`}
+                label={`Vegan`}
+              ></Form.Check>
+              <Form.Check
+                inline
+                label="Vegeterian"
+                type={"checkbox"}
+                id={`vegeterian`}
+              />
+              <Form.Check
+                inline
+                type={"checkbox"}
+                id={`Gluten-Free`}
+                label={`Gluten-Free`}
+              ></Form.Check>
+            </div>
+          </Form>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={hideModal}>
+              Skip
+            </Button>
+            <Button variant="secondary" onClick={(e) => handlePref(e)}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Card>
     </>
   );

@@ -13,6 +13,22 @@ const firebaseconfig = {
 
 firebase.initializeApp(firebaseconfig);
 
+const UsersRef = firebase.database().ref(`users`);
+
+export const fetchRole = (currentUserId) => {
+  UsersRef.once("value", (snap) => {
+    snap.forEach(function () {
+      firebase
+        .database()
+        .ref(`users`)
+        .child(currentUserId)
+        .once("value", (snap) => {
+          if (snap.val()) return 12;
+        });
+    });
+  });
+};
+
 export const auth = firebase.auth();
 
 export default firebase;
