@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useHistory } from "react-router-dom";
-import firebase, { fetchRole } from "../firebase";
+import { Link } from "react-router-dom";
+import firebase from "../firebase";
 
 export default function Dashboard() {
   const [error] = useState("");
@@ -39,7 +39,7 @@ export default function Dashboard() {
           <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
             Update Profile
           </Link>
-          <Link to="/update-pref" className="btn btn-primary w-100 mt-3">
+          <Link to="/prefernces" className="btn btn-primary w-100 mt-3">
             Update Preferences
           </Link>
         </Card.Body>

@@ -23,7 +23,7 @@ export const fetchRole = (currentUserId) => {
         .ref(`users`)
         .child(currentUserId)
         .once("value", (snap) => {
-          if (snap.val()) return 12;
+          if (snap.val()) return fetchRole;
         });
     });
   });

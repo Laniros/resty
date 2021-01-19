@@ -4,6 +4,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import firebase from "../firebase";
 
+//TODO: decide what to do (keep/delete/use otherwise) with the modal option
+
 export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -85,7 +87,7 @@ export default function Signup() {
             <Form.Control type="password" ref={passwordRef} required />
           </Form.Group>
           <Form.Group id="password-confirm">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Confirm Password</Form.Label>
             <Form.Control type="password" ref={passwordConfirmRef} required />
           </Form.Group>
           <Button disabled={loading} className="w-100" type="submit">
