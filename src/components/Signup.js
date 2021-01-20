@@ -43,11 +43,9 @@ export default function Signup() {
       );
       setLoading(false);
     } else {
-      const db = firebase.database();
-
-      var ref = db.ref("users");
-      var usersRef = ref.child(res);
-      usersRef.set({
+      const firestore = firebase.firestore();
+      const usersRef = firestore.collection("users").doc(res);
+      const addingUserData = await usersRef.set({
         email: emailRef.current.value,
         role: 0,
       });

@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { Card, Alert, Form, Button } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
-import firebase from "../firebase";
+import firebase, { fetchRole } from "../firebase";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
 
 export default function AddRestaurant() {
+  const firestore = firebase.firestore();
   const [error] = useState("");
   const { currentUser } = useAuth();
   const [role, setRole] = useState(0);
   const [address, setAddress] = useState("");
+  const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
@@ -34,15 +36,16 @@ export default function AddRestaurant() {
     setAddress(value);
     setCoordinates(latlng);
   };
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    const db = firebase.database();
-    var ref = db.ref("restaurants");
 
     //TODO: Complete every reference and put it in database
     //Add google location to address field
-    await ref.push({
+
+    const resRef = firestore.collection("restaurants");
+    await resRef.add({
       name: nameRef.current.value,
       coordinates: coordinates,
       vegan: veganRef.current.checked,
@@ -51,24 +54,28 @@ export default function AddRestaurant() {
     });
   }
 
-  const usersRef = firebase.database().ref(`users`);
   useEffect(() => {
-    usersRef.once("value", (snap) => {
-      snap.forEach(function () {
-        firebase
-          .database()
-          .ref("users")
-          .child(currentUser.uid)
-          .once("value", (snap) => {
-            if (snap.val()) setRole(snap.val().role);
-          });
+    if (currentUser) {
+      fetchRole(currentUser).then((r) => {
+        setRole(r);
       });
-    });
+    }
   }, []);
+
+  function addDishes() {
+    return (
+      <div>
+        <Card>
+          <Card.Body>what?</Card.Body>
+          <Card.Footer>fasf</Card.Footer>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <>
-      <Card style={{ width: "30rem" }}>
+      <Card style={{ width: "50rem", marginTop: "10px" }}>
         <Card.Body>
           <h2 className="text-center mb-4">Add Restarurant</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -97,6 +104,7 @@ export default function AddRestaurant() {
                     }) => (
                       <div>
                         <input
+                          style={{ width: "100%" }}
                           {...getInputProps({ placeholder: "Type address" })}
                         />
                         <div>
@@ -168,6 +176,10 @@ export default function AddRestaurant() {
                   id={`thai`}
                   label={`Thai`}
                 ></Form.Check>
+              </div>
+              <div>
+                <p>Add at least five dishes:</p>
+                {addDishes()}
               </div>
               <Button disabled={loading} className="w-100" type="submit">
                 Sign Up

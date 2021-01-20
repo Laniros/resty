@@ -17,11 +17,8 @@ function App() {
     <>
       <AuthProvider>
         <NavBar />
-        <Container
-          className="d-flex align-items-center justify-content-center"
-          style={{ minHeight: "70vh" }}
-        >
-          <div className="w-100" style={{ maxWidth: "400px" }}>
+        <Container style={{ minHeight: "70vh" }}>
+          <div>
             <Router>
               <Switch>
                 <PrivateRoute exact path="/" component={Home} />

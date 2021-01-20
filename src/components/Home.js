@@ -1,37 +1,23 @@
 import React, { useState, useEffect } from "react";
-import firebase, { fetchRole } from "../firebase";
+import firestore, { fetchResData, fetchRole } from "../firebase";
 import RestaurantCard from "./RestaurantCard";
 
 function Home() {
   const [names, setNames] = useState("");
-  const [res, setRes] = useState([]);
+  const [data, setData] = useState([]);
 
-  const fetchData = async () => {
-    const ref = firebase.database().ref("restaurants");
-    await ref.once("value", (snapshot) => {
-      const result = [];
-      snapshot.forEach((snap) => {
-        result.push(snap.val());
-        setRes(snap.val());
-        setNames(result);
-        console.log(result);
-      });
-    });
-  };
+  const fetchData = async () => {};
 
   useEffect(() => {
-    fetchData();
+    fetchResData().then((d) => {
+      setData(d);
+    });
   }, []);
 
   return (
     <div>
-      {/*{navigator.geolocation.getCurrentPosition(function (position) {
-        console.log("Latitude is: ", position.coords.latitude);
-        console.log("Longitude is: ", position.coords.longitude);
-      })}*/}
-
-      {names
-        ? Object.values(names).map((r, i) => {
+      {data
+        ? Object.values(data).map((r, i) => {
             return (
               <div key={i}>
                 {/* That's how to get the values other than lan/lat !!!!!!! */}
@@ -50,6 +36,10 @@ function Home() {
             );
           })
         : ""}
+      {/*{navigator.geolocation.getCurrentPosition(function (position) {
+        console.log("Latitude is: ", position.coords.latitude);
+        console.log("Longitude is: ", position.coords.longitude);
+      })}*/}
     </div>
   );
 }

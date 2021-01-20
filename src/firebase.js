@@ -12,23 +12,22 @@ const firebaseconfig = {
 };
 
 firebase.initializeApp(firebaseconfig);
-
-const UsersRef = firebase.database().ref(`users`);
-
-export const fetchRole = (currentUserId) => {
-  UsersRef.once("value", (snap) => {
-    snap.forEach(function () {
-      firebase
-        .database()
-        .ref(`users`)
-        .child(currentUserId)
-        .once("value", (snap) => {
-          if (snap.val()) return fetchRole;
-        });
-    });
-  });
-};
-
 export const auth = firebase.auth();
+export const firestore = firebase.firestore();
+
+export async function fetchRole(currentUser) {
+  const usersRef = firestore.collection("users").doc(currentUser.uid);
+  const doc = await usersRef.get();
+  if (!doc.exists) {
+    console.log("No such document!");
+  } else {
+    return doc.data().role;
+  }
+}
+
+export async function fetchResData() {
+  const snapshot = await firestore.collection("restaurants").get();
+  return snapshot.docs.map((doc) => doc.data());
+}
 
 export default firebase;

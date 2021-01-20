@@ -2,26 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
-import firebase from "../firebase";
+import firebase, { fetchRole } from "../firebase";
 
 export default function Dashboard() {
   const [error] = useState("");
   const { currentUser } = useAuth();
   const [role, setRole] = useState(0);
 
-  const UsersRef = firebase.database().ref(`users`);
   useEffect(() => {
-    UsersRef.once("value", (snap) => {
-      snap.forEach(function () {
-        firebase
-          .database()
-          .ref("users")
-          .child(currentUser.uid)
-          .once("value", (snap) => {
-            if (snap.val()) setRole(snap.val().role);
-          });
+    if (currentUser) {
+      fetchRole(currentUser).then((r) => {
+        setRole(r);
       });
-    });
+    }
   }, []);
 
   return (
