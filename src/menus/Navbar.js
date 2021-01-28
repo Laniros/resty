@@ -3,9 +3,8 @@ import { useHistory } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useAuth } from "../contexts/AuthContext";
-import Dashboard from "../components/Dashboard";
 import userpic from "../components/userpic.png";
-
+import RequestRestaurant from "../components/RequestRestaurant";
 export default function NavBar() {
   const { currentUser } = useAuth();
   const { logout } = useAuth();
@@ -26,6 +25,7 @@ export default function NavBar() {
         <Navbar.Brand href="/">Resty</Navbar.Brand>
         <Nav className="container-fluid">
           {currentUser && <Nav.Link href="/">Home</Nav.Link>}
+
           {currentUser && (
             <Nav.Link className="ml-auto" onClick={logoutUser} href="/">
               Logout
