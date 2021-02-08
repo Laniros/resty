@@ -38,4 +38,22 @@ export async function fetchResData() {
   return snapshot.docs.map((doc) => doc.data());
 }
 
+//add picture to storage
+export async function addToStorage(pic, name) {
+  try {
+    return storageRef
+      .child("restaurants/")
+      .child(name + "/" + pic.name)
+      .put(pic)
+      .then((snapshot) => {
+        return snapshot.ref.getDownloadURL();
+      })
+      .then((url) => {
+        return url;
+      });
+  } catch (error) {
+    return error;
+  }
+}
+
 export default firebase;
